@@ -56,12 +56,13 @@ export default function Home() {
 
   return (
     <>
-      <div className='flex justify-center mt-16'>
-        <div className='col-span-3 items-center'>
+      <div className="flex justify-center">
+        <div className="col-span-3 mr-20 items-center">
+          <p className="mt-5 text-base text-[#707070]">Shop &gt; Mobile phones &gt; Samsung &gt; <span className="font-bold text-black">{name}</span></p>
           <ImageViewer src={image} />
         </div>
-        <div className='col-span-9'>
-          <h1 className='font-semibold text-center text-xl'>
+        <div className="col-span-9 w-96 mt-16">
+          <h1 className="font-semibold text-center text-xl">
             Samsung {name}
             <br />
             {variantName}/{variantMemory}
