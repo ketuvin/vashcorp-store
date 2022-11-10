@@ -15,28 +15,42 @@ const {
 } = productActions;
 
 export default function Home() {
+  const memoryOptions = ["32GB", "64GB", "256GB"];
   const dispatch = useDispatch();
 
   const { product, variantName, variantMemory, variantPrice } = useSelector((state) => state.products);
   const { name, image, options, variants } = product;
 
-  const [variant, setVariant] = useState([]);
+  const [availableMemory, setAvailableMemory] = useState([]);
 
   useEffect(() => {
     dispatch(getProduct());
+
+    if (variantName == "BLUE" && variantMemory == "32GB") {
+      dispatch(setVariantMemory("64GB"));
+
+      const availableMemory = []
+      let memories = memoryOptions.filter((memory) => memory == "64GB");
+      availableMemory.push(memories[0]);
+      setAvailableMemory(availableMemory);
+    }
   }, [dispatch]);
 
   const checkColorVariantsCallback = (data) => {
     dispatch(setVariantName(data));
     const result = variants.filter((variant) => variant.options.color == data);
-    setVariant(result);
+    const availableMemory = []
+    result.forEach((variant) => {
+      let memories = memoryOptions.filter((memory) => variant.options.memory == memory);
+      availableMemory.push(memories[0]);
+    });
+    dispatch(setVariantMemory(availableMemory[0]));
+    setAvailableMemory(availableMemory);
     dispatch(checkVariant());
   };
 
   const checkMemoryVariantsCallback = (data) => {
     dispatch(setVariantMemory(data));
-    const result = variants.filter((variant) => variant.options.memory == data);
-    setVariant(result);
     dispatch(checkVariant());
   };
 
@@ -57,14 +71,14 @@ export default function Home() {
             className="flex justify-center"
             count={5}
             value={4.5}
-            size={24}
+            size={22}
             edit={false}
             color2={'#f36d22'}
           />
-          PHP{variantPrice}.00
-          <p className="text-xs mx-0 mb-1 font-semibold text-center text-[#126B60]">VARIANTS:</p>
+          <p className="text-xl mt-2.5 font-semibold text-center text-[#f36d22]">{new Intl.NumberFormat('en-PH', { style: 'currency', currency: 'PHP'}).format(variantPrice)}</p>
+          <p className="text-xs mt-2.5 mb-1 font-semibold text-center text-[#126B60]">VARIANTS:</p>
           <ColorSelection options={options} checkColorVariantsCallback={checkColorVariantsCallback} />
-          <MemorySelection options={options} variant={variant} checkMemoryVariantsCallback={checkMemoryVariantsCallback}/>
+          <MemorySelection options={options} availableMemory={availableMemory} checkMemoryVariantsCallback={checkMemoryVariantsCallback}/>
         </div>
       </div>
     </>
