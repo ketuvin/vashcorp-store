@@ -16,3 +16,27 @@ export const getProduct = (operation = null) => {
         }
     }
 };
+
+export const checkVariant = (operation = null) => {
+    return (dispatch, getState) => {
+        const {
+            product,
+            variantName,
+            variantMemory
+        } = getState().products;
+
+        const { variants } = product;
+        
+        try {
+            const result = variants.filter((variant) => variant.options.color == variantName && variant.options.memory == variantMemory);
+            console.log(result);
+            if (result.length !== 0) {
+                dispatch(productActions.setVariantPrice(result[0].price));
+            }
+
+            return Promise.resolve(result);
+        } catch (err) {
+            return Promise.resolve(err);
+        }
+    }
+};

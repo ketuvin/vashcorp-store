@@ -2,8 +2,8 @@ import PropTypes from "prop-types";
 
 const ColorSelection = (props) => {
     const checkColorHandler = (e) => {
-        if (props.checkVariantsCallback) {
-            props.checkVariantsCallback(e.target.value);
+        if (props.checkColorVariantsCallback) {
+            props.checkColorVariantsCallback(e.target.value);
         }
     }
 
@@ -14,11 +14,12 @@ const ColorSelection = (props) => {
                 <button key={index} value={color} className='w-24 m-0.5 p-0 text-xs bg-white text-[#126B60] focus:bg-[#126B60] focus:text-white' onClick={checkColorHandler}>{color}</button>
             ))}
         </div>
-    )
+    );
 };
 
 ColorSelection.propTypes = {
-    checkVariantsCallback: PropTypes.func
-}
+    options: PropTypes.arrayOf(PropTypes.any),
+    checkColorVariantsCallback: PropTypes.func
+};
 
 export default ColorSelection;
